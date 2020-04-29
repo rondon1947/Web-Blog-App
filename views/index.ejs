@@ -9,7 +9,7 @@
             <% blogs.forEach(function(blog){ %>
                 <div class="item">
                     <div class="image">
-                        <img src="<%= blog.image %>">
+                        <img style="height: 190px;" src="<%= blog.image %>">
                     </div>
                     <div class="content">
                         <a class="header" href="/blogs/<%= blog._id %>">
@@ -22,7 +22,7 @@
                         </div>
                         <div class="description">
                             <p> 
-                                <%- blog.body.substring(0, 100) %>....
+                                <%- blog.body.substring(0, 150) %>....
                             </p>
                         </div>
                         <div class="extra">
