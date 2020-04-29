@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
+mongoose.set('useFindAndModify', false);
 
 var blogSchema = new mongoose.Schema({
     title: String,
@@ -82,6 +83,16 @@ app.put("/blogs/:id", function(req, res){
         }
     });
 })
+
+app.delete("/blogs/:id", function(req, res){
+    Blog.findByIdAndDelete(req.params.id, function(err){
+        if(err){
+            res.redirect("/blogs");
+        } else{
+            res.redirect("/blogs");
+        }
+    });
+});
 
 app.listen(3000, function(){
     console.log("Blog server started at localhost:3000");
