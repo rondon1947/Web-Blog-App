@@ -1,4 +1,5 @@
 var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
 var mongoose = require('mongoose');
 var express = require('express');
 var app = express();
@@ -6,6 +7,7 @@ var app = express();
 mongoose.connect("mongodb://localhost:27017/blog_app", { useUnifiedTopology: true, useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 
 var blogSchema = new mongoose.Schema({
@@ -60,6 +62,26 @@ app.get("/blogs/:id", function(req, res){
         }
     });
 });
+
+app.get("/blogs/:id/edit", function(req, res){
+    Blog.findById(req.params.id, function(err, foundBlog){
+        if(err){
+            console.log(err);
+        } else{
+            res.render("edit", {blog: foundBlog});
+        }
+    });
+});
+
+app.put("/blogs/:id", function(req, res){
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
+        if(err){
+            res.redirect("/blogs");
+        } else{
+            res.redirect("/blogs/"+req.params.id);
+        }
+    });
+})
 
 app.listen(3000, function(){
     console.log("Blog server started at localhost:3000");
